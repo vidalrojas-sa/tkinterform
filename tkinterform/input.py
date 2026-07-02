@@ -1,0 +1,31 @@
+from abc import ABCMeta, abstractmethod
+from .widget import Widget
+
+
+class Input(Widget, metaclass=ABCMeta):
+    """
+    Base class for `tkinterform.Input` widgets, used as a standard interface
+    for `tkinterform.Input` widgets.
+    """
+
+    def __init__(self, id=None, *args, **kwargs):
+        super(Input, self).__init__(id=id, *args, **kwargs)
+
+    @abstractmethod
+    def get(self):
+        """Override method to get this `tkinterform.Input` value."""
+        pass
+
+    @abstractmethod
+    def is_valid(self):
+        """Override method to handle invalid behaviors."""
+        pass
+
+    def on_update(self, *args):
+        """Override method to handle input updates."""
+        self.master.event_generate("<<TkfInputUpdate>>", when="tail")
+
+    @abstractmethod
+    def set(self, value):
+        """Override method to set this `tkinterform.Input` value."""
+        pass
