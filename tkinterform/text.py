@@ -11,7 +11,11 @@ class Text(Input, ttk.Entry):
         It should be registered via `tkinterform.Form.add()`.
         """
         self.entry_var = tk.StringVar()
-        self.entry_var.trace_add("write", self.on_text_write)
+        try:
+            self.entry_var.trace_add("write", self.on_text_write)
+        except AttributeError:
+            # Fallback for Python<=3.6
+            self.entry_var.trace("w", self.on_text_write)
         self.observe = observe
         self.required = required
 

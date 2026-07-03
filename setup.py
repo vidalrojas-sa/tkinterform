@@ -8,7 +8,7 @@ setup(
     name="tkinterform",
     version="0.1.0",
     python_requires=">=3.2",
-    description="A package for building forms with Tkinter",
+    description="Build forms with Tkinter",
     long_description=README,
     long_description_content_type="text/markdown",
     url="https://github.com/vidalrojas-sa/tkinterform.git",

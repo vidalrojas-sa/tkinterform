@@ -32,7 +32,7 @@ class Sequence(Input, ttk.Frame):
         for form in self.children_:
             form.destroy()
 
-        self.children_.clear()
+        del self.children_[:]
 
     def delete(self, index, update_index=True):
         if 0 <= index < len(self.children_):

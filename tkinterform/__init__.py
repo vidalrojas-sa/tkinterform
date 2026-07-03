@@ -4,12 +4,7 @@ from tkinterform.label import Label
 from tkinterform.sequence import Sequence
 from tkinterform.text import Text
 
-from importlib.metadata import version, PackageNotFoundError
-
-try:
-    __version__ = version("tkinterform")
-except PackageNotFoundError:
-    __version__ = "dev"
+__version__ = "0.1.0"
 
 import tkinter as tk
 from tkinter import ttk
