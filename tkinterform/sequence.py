@@ -3,20 +3,19 @@ from .input import Input
 
 
 class Sequence(Input, ttk.Frame):
-    def __init__(self, master, form_cls, form_name=None, id=None, **kwargs):
+    def __init__(self, master, of_form, id=None, **kwargs):
         """
         Construct a `tkinterform.Sequence` widget with the parent MASTER.
 
         It should be registered via `tkinterform.Form.add()`.
         """
         self.children_ = []
-        self.form_cls = form_cls
-        self.form_name = form_name
+        self.form_cls = of_form
 
         super(Sequence, self).__init__(id=id, master=master, **kwargs)
 
     def add(self, update_index=True):
-        form = self.form_cls(self, name=self.form_name)
+        form = self.form_cls(self)
         self.append(form)
 
         if update_index:

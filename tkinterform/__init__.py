@@ -12,7 +12,9 @@ from tkinter import ttk
 
 class _FormElement(Form):
     def __init__(self, master, *args, **kwargs):
-        super(_FormElement, self).__init__(master, *args, **kwargs)
+        super(_FormElement, self).__init__(
+            master, name="Element", *args, **kwargs
+        )
 
         self.number = None
 
@@ -48,12 +50,7 @@ def _test():
         command=lambda: form.children_.get("sequence").add(),
         text="Create element",
     )
-    form.add(
-        Sequence,
-        form_cls=_FormElement,
-        form_name="Element",
-        id="sequence",
-    )
+    form.add(Sequence, of_form=_FormElement, id="sequence")
     form_values = {
         "text": "Hello, world!",
         "sequence": [
