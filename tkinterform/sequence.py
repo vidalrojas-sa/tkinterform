@@ -3,59 +3,57 @@ from .input import Input
 
 
 class Sequence(Input, ttk.Frame):
-    def __init__(self, master, of_form, id=None, **kwargs):
+    def __init__(self, master, of_form, *args, **kwargs):
         """
         Construct a `tkinterform.Sequence` widget with the parent MASTER.
 
         It should be registered via `tkinterform.Form.add()`.
         """
-        self.children_ = []
-        self.form_cls = of_form
+        self.form = of_form
+        self.tkf_children = []
 
-        super(Sequence, self).__init__(id=id, master=master, **kwargs)
+        super(Sequence, self).__init__(master, *args, **kwargs)
 
-    def add(self, update_index=True):
-        form = self.form_cls(self)
+    def _refresh_children(self):
+        for form in self.tkf_children:
+            form.on_master_update()
+
+    def add(self, refresh_children=True):
+        form = self.form(self)
         self.append(form)
 
-        if update_index:
-            self._update_index()
+        if refresh_children:
+            self._refresh_children()
 
         return form
 
     def append(self, form):
         form.pack(fill="x")
-        self.children_.append(form)
+        self.tkf_children.append(form)
 
     def clear(self):
-        for form in self.children_:
+        for form in self.tkf_children:
             form.destroy()
 
-        del self.children_[:]
+        del self.tkf_children[:]
 
-    def delete(self, index, update_index=True):
-        if 0 <= index < len(self.children_):
-            self.children_.pop(index).destroy()
+    def delete(self, index, refresh_children=True):
+        if 0 <= index < len(self.tkf_children):
+            self.tkf_children.pop(index).destroy()
 
-            if update_index:
-                self._update_index()
+            if refresh_children:
+                self._refresh_children()
 
     def get(self):
-        return [form.get() for form in self.children_]
+        return [form.get() for form in self.tkf_children]
 
     def is_valid(self):
-        return all(form.is_valid() for form in self.children_)
+        return all(form.is_valid() for form in self.tkf_children)
 
     def set(self, list_):
         self.clear()
 
         for element in list_:
-            form = self.add(update_index=False)
-            form.set(element)
+            self.add(refresh_children=False).set(element)
 
-        self._update_index()
-
-    def _update_index(self):
-        for idx, form in enumerate(self.children_):
-            form.set_id(idx)
-            form._update_form()
+        self._refresh_children()

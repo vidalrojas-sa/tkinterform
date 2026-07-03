@@ -8,8 +8,8 @@ class Input(Widget, metaclass=ABCMeta):
     for `tkinterform.Input` widgets.
     """
 
-    def __init__(self, id=None, *args, **kwargs):
-        super(Input, self).__init__(id=id, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super(Input, self).__init__(*args, **kwargs)
 
     @abstractmethod
     def get(self):

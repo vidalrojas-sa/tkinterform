@@ -17,42 +17,56 @@ class Form(Input, ttk.Frame):
     `Form.set()` distributes values to all child `Input` instances.
     """
 
-    def __init__(self, master, id=None, name=None, **kwargs):
+    def __init__(self, master, description=None, *args, **kwargs):
         """
         Construct a `tkinterform.Form` widget with the parent MASTER.
         """
-        self.children_ = {}
-        self.name = name
+        self.description = description
+        self.tkf_children = {}
 
-        super(Form, self).__init__(id=id, master=master, **kwargs)
+        super(Form, self).__init__(master, *args, **kwargs)
 
-    def _update_form(self):
-        pass
+    def add(self, widget, master=None, name=None, **kwargs):
+        target_master = master if master else self
 
-    def add(self, widget, **kwargs):
-        self.append(widget(self, **kwargs))
+        if isinstance(target_master, str) and self.has(master):
+            target_master = self.tkf_children.get(master)
 
-    def append(self, widget):
+        self.append(widget(target_master, **kwargs), name)
+
+    def append(self, widget, name=None):
         widget.pack(fill="x")
 
-        if isinstance(widget, Widget) and widget.id:
-            self.children_[widget.id] = widget
+        if name is not None:
+            if isinstance(widget, Widget):
+                widget.name = name
+
+            self.tkf_children[name] = widget
+
+    @property
+    def current_position(self):
+        if isinstance(self.master.tkf_children, list):
+            try:
+                return self.master.tkf_children.index(self)
+            except ValueError:
+                return None
+        return None
 
     def get(self):
         return {
-            id: wdgt.get()
-            for id, wdgt in self.children_.items()
-            if isinstance(wdgt, Input)
+            name: widget.get()
+            for name, widget in self.tkf_children.items()
+            if isinstance(widget, Input)
         }
 
-    def has(self, id):
-        return id in self.children_
+    def has(self, name):
+        return name in self.tkf_children
 
     def is_valid(self):
         return all(
-            wdgt.is_valid()
-            for wdgt in self.children_.values()
-            if isinstance(wdgt, Input)
+            widget.is_valid()
+            for widget in self.tkf_children.values()
+            if isinstance(widget, Input)
         )
 
     def keys(self):
@@ -60,20 +74,21 @@ class Form(Input, ttk.Frame):
         Returns a list of all keys contained in the Form instance.
         The keys are strings.
         """
-        return list(self.children_)
+        return list(self.tkf_children)
+
+    def on_master_update(self):
+        pass
 
     def set(self, dict_):
-        for id, value in dict_.items():
-            wdgt = self.children_.get(id)
-            if wdgt and isinstance(wdgt, Input):
-                wdgt.set(value)
+        for key, value in dict_.items():
+            widget = self.tkf_children.get(key)
 
-    def set_id(self, id):
-        self.id = id
+            if widget and isinstance(widget, Input):
+                widget.set(value)
 
     def values(self):
         return [
-            wdgt.get()
-            for wdgt in self.children_.values()
-            if isinstance(wdgt, Input)
+            widget.get()
+            for widget in self.tkf_children.values()
+            if isinstance(widget, Input)
         ]

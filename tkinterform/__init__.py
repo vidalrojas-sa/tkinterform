@@ -1,6 +1,5 @@
 from tkinterform.form import Form
 from tkinterform.input import Input
-from tkinterform.label import Label
 from tkinterform.sequence import Sequence
 from tkinterform.text import Text
 
@@ -13,28 +12,25 @@ from tkinter import ttk
 class _FormElement(Form):
     def __init__(self, master, *args, **kwargs):
         super(_FormElement, self).__init__(
-            master, name="Element", *args, **kwargs
+            master, description="Element", *args, **kwargs
         )
 
-        self.number = None
-
-        self.add(
-            Label,
-            id="title",
-            text=("%s %s" % (self.name, self.number)),
-        )
+        self.add(ttk.Label, name="title", text="")
         self.add(ttk.Button, command=self._delete_self, text="Delete")
-        self.add(Label, text="Text")
-        self.add(Text, id="text")
+        self.add(ttk.Label, text="Text")
+        self.add(Text, name="text")
 
     def _delete_self(self):
-        self.master.delete(self.id)
+        index = self.current_position
+        if index is not None:
+            self.master.delete(index)
 
-    def _update_form(self):
-        self.number = self.id + 1 if isinstance(self.id, int) else None
-        self.children_.get("title").config(
-            text=("%s %s" % (self.name, self.number))
-        )
+    def on_master_update(self):
+        index = self.current_position
+        if index is not None:
+            self.tkf_children.get("title").config(
+                text=f"{self.description} {index + 1}"
+            )
 
 
 def _test():
@@ -43,14 +39,14 @@ def _test():
     text = "This is Tkinterform %s" % __version__
     form.add(ttk.Label, anchor="center", text=text)
     form.add(ttk.Label, text="Text")
-    form.add(Text, id="text")
+    form.add(Text, name="text")
     form.add(ttk.Label, text="Sequence")
     form.add(
         ttk.Button,
-        command=lambda: form.children_.get("sequence").add(),
+        command=lambda: form.tkf_children.get("sequence").add(),
         text="Create element",
     )
-    form.add(Sequence, of_form=_FormElement, id="sequence")
+    form.add(Sequence, of_form=_FormElement, name="sequence")
     form_values = {
         "text": "Hello, world!",
         "sequence": [
