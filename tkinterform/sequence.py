@@ -10,12 +10,12 @@ class Sequence(Input, ttk.Frame):
         It should be registered via `tkinterform.Form.add()`.
         """
         self.form = of_form
-        self.tkf_children = []
+        self.fieldsets = []
 
         super(Sequence, self).__init__(master, *args, **kwargs)
 
     def _refresh_children(self):
-        for form in self.tkf_children:
+        for form in self.fieldsets:
             form.on_master_update()
 
     def add(self, refresh_children=True):
@@ -29,26 +29,26 @@ class Sequence(Input, ttk.Frame):
 
     def append(self, form):
         form.pack(fill="x")
-        self.tkf_children.append(form)
+        self.fieldsets.append(form)
 
     def clear(self):
-        for form in self.tkf_children:
+        for form in self.fieldsets:
             form.destroy()
 
-        del self.tkf_children[:]
+        del self.fieldsets[:]
 
     def delete(self, index, refresh_children=True):
-        if 0 <= index < len(self.tkf_children):
-            self.tkf_children.pop(index).destroy()
+        if 0 <= index < len(self.fieldsets):
+            self.fieldsets.pop(index).destroy()
 
             if refresh_children:
                 self._refresh_children()
 
     def get(self):
-        return [form.get() for form in self.tkf_children]
+        return [form.get() for form in self.fieldsets]
 
     def is_valid(self):
-        return all(form.is_valid() for form in self.tkf_children)
+        return all(form.is_valid() for form in self.fieldsets)
 
     def set(self, list_):
         self.clear()

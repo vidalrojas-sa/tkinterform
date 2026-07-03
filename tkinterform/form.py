@@ -45,9 +45,9 @@ class Form(Input, ttk.Frame):
 
     @property
     def current_position(self):
-        if isinstance(self.master.tkf_children, list):
+        if hasattr(self.master, "fieldsets"):
             try:
-                return self.master.tkf_children.index(self)
+                return self.master.fieldsets.index(self)
             except ValueError:
                 return None
         return None
