@@ -36,6 +36,7 @@ class Sequence(Input, ttk.Frame):
             form.destroy()
 
         del self.fieldsets[:]
+        self.config(width=1, height=1)
 
     def delete(self, index, refresh_children=True):
         if 0 <= index < len(self.fieldsets):
