@@ -41,6 +41,10 @@ class Sequence(Input, ttk.Frame):
         if 0 <= index < len(self.fieldsets):
             self.fieldsets.pop(index).destroy()
 
+            # Collapse into nothing when no fieldsets
+            if not self.fieldsets:
+                self.config(width=1, height=1)
+
             if refresh_children:
                 self._refresh_children()
 
