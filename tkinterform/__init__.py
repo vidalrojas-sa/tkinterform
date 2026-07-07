@@ -20,16 +20,21 @@ class _FormElement(Form):
         self.add(ttk.Label, text="Text")
         self.add(Text, name="text")
 
+        self._set_up_bind()
+
+    def _set_up_bind(self):
+        self.bind("<<TkfSequenceUpdate>>", self.on_sequence_update)
+
     def _delete_self(self):
-        index = self.current_position
+        index = self._at_index_in_sequence
         if index is not None:
             self.master.delete(index)
 
-    def on_master_update(self):
-        index = self.current_position
+    def on_sequence_update(self, event):
+        index = self._at_index_in_sequence
         if index is not None:
-            self.tkf_children.get("title").config(
-                text="%s %s" % (self.description, (index + 1))
+            self.entry_config(
+                "title", text="%s %s" % (self.description, (index + 1))
             )
 
 
@@ -46,7 +51,7 @@ def _test():
         command=lambda: form.tkf_children.get("sequence").add(),
         text="Create element",
     )
-    form.add(Sequence, of_form=_FormElement, name="sequence")
+    form.add(Sequence, form=_FormElement, name="sequence")
     form_values = {
         "text": "Hello, world!",
         "sequence": [
