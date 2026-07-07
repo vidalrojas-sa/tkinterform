@@ -5,34 +5,31 @@ from .input import Input
 
 
 class Text(Input, ttk.Entry):
-    def __init__(self, master, observe=True, required=False, *args, **kwargs):
+    def __init__(self, master, required=False, *args, **kwargs):
         """
         Construct a `tkinterform.Text` widget with the parent MASTER.
-
-        It should be registered via `tkinterform.Form.add()`.
         """
-        self._stop_observe = False
-        self.observe = observe
+        self._do_not_trace = False
         self.required = required
         self.text_var = tk.StringVar()
 
         try:
-            self.text_var.trace_add("write", self.on_text_write)
+            self.text_var.trace_add("write", self.on_write)
         except AttributeError:
             # Fallback for Python<=3.6
-            self.text_var.trace("w", self.on_text_write)
+            self.text_var.trace("w", self.on_write)
 
         super(Text, self).__init__(
-            master=master, textvariable=self.text_var, *args, **kwargs
+            master, textvariable=self.text_var, *args, **kwargs
         )
 
     @contextmanager
-    def _stop_observer(self):
-        self._stop_observe = True
+    def _trace_stop(self):
+        self._do_not_trace = True
         try:
             yield
         finally:
-            self._stop_observe = False
+            self._do_not_trace = False
 
     def get(self):
         return ttk.Entry.get(self).strip()
@@ -43,12 +40,12 @@ class Text(Input, ttk.Entry):
 
         return True
 
-    def on_text_write(self, *args):
-        if self.observe and not self._stop_observe:
+    def on_write(self, *args):
+        if not self._do_not_trace:
             self.master.event_generate("<<TkfInputUpdate>>", when="tail")
 
     def set(self, string):
-        with self._stop_observer():
+        with self._trace_stop():
             self.delete(0, tk.END)
             if string is not None and string != "":
                 self.insert(0, string)
