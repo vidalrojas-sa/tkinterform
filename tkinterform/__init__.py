@@ -1,3 +1,4 @@
+from tkinterform.checkbox import Checkbox
 from tkinterform.form import Form
 from tkinterform.input import Input
 from tkinterform.sequence import Sequence
@@ -46,6 +47,7 @@ def _test():
     form.add(ttk.Label, anchor="center", text=text)
     form.add(ttk.Label, text="Text")
     form.add(Text, name="text")
+    form.add(Checkbox, name="checkbox", text="Checkbox")
     form.add(ttk.Label, text="Sequence")
     form.add(
         ttk.Button,
