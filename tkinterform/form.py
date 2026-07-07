@@ -1,5 +1,6 @@
 from tkinter import ttk
 from .input import Input
+from .sequence import Sequence
 from .widget import Widget
 
 
@@ -26,15 +27,10 @@ class Form(Input, ttk.Frame):
 
         super(Form, self).__init__(master, *args, **kwargs)
 
-    def add(self, widget, master=None, name=None, **kwargs):
-        target_master = master if master else self
-
-        if isinstance(target_master, str) and self.has(master):
-            target_master = self.tkf_children.get(master)
-
-        self.append(widget(target_master, **kwargs), name)
-
-    def append(self, widget, name=None):
+    def add(self, widget_type, master=None, name=None, **kwargs):
+        """Internal function."""
+        master = self.tkf_children.get(master) if master else self
+        widget = widget_type(master, **kwargs)
         widget.pack(fill="x")
 
         if name is not None:
@@ -43,16 +39,33 @@ class Form(Input, ttk.Frame):
 
             self.tkf_children[name] = widget
 
+        return widget
+
     @property
-    def current_position(self):
-        if hasattr(self.master, "fieldsets"):
+    def _at_index_in_sequence(self):
+        if isinstance(self.master, Sequence):
             try:
                 return self.master.fieldsets.index(self)
             except ValueError:
                 return None
         return None
 
-    def get(self):
+    def entry_config(self, name, **kwargs):
+        if not self.has(name):
+            return
+
+        widget = self.tkf_children.get(name)
+        widget.config(**kwargs)
+
+    def get(self, name=None):
+        if name is None:
+            return self._get_all()
+
+        widget = self.tkf_children.get(name)
+
+        return widget.get() if isinstance(widget, Input) else None
+
+    def _get_all(self):
         return {
             name: widget.get()
             for name, widget in self.tkf_children.items()
@@ -76,11 +89,20 @@ class Form(Input, ttk.Frame):
         """
         return list(self.tkf_children)
 
-    def set(self, dict_):
-        for key, value in dict_.items():
-            widget = self.tkf_children.get(key)
+    def set(self, dict_, name=None):
+        if name is None:
+            self._set_all(dict_)
+        elif name in dict_:
+            widget = self.tkf_children.get(name)
 
-            if widget and isinstance(widget, Input):
+            if isinstance(widget, Input):
+                widget.set(dict_[name])
+
+    def _set_all(self, dict_):
+        for name, value in dict_.items():
+            widget = self.tkf_children.get(name)
+
+            if isinstance(widget, Input):
                 widget.set(value)
 
     def values(self):
