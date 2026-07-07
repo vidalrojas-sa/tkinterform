@@ -32,10 +32,11 @@ class _FormElement(Form):
 
     def on_sequence_update(self, event):
         index = self._at_index_in_sequence
+
+        title_text = "%s %s" % (self.description, (index + 1))
+
         if index is not None:
-            self.entry_config(
-                "title", text="%s %s" % (self.description, (index + 1))
-            )
+            self.entry_config("title", text=title_text)
 
 
 def _test():
@@ -63,11 +64,6 @@ def _test():
     form.add(ttk.Button, command=lambda: print(form.get()), text="Print")
     form.add(ttk.Button, command=root.destroy, text="Quit")
     form.pack(fill="x", padx=8, pady=8)
-
-    def _on_input_update(event):
-        print("TkfInputUpdate event received")
-
-    root.bind("<<TkfInputUpdate>>", _on_input_update)
     root.iconify()
     root.update()
     root.deiconify()
