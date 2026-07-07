@@ -32,7 +32,7 @@ class Text(Input, ttk.Entry):
             self._do_not_trace = False
 
     def get(self):
-        return ttk.Entry.get(self).strip()
+        return self.text_var.get().strip()
 
     def is_valid(self):
         if self.required and not self.get():
