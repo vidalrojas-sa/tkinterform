@@ -39,7 +39,7 @@ class Form(Input, ttk.Frame):
 
         if name is not None:
             if isinstance(widget, Widget):
-                widget.name = name
+                widget.tkf_name = name
 
             self.tkf_children[name] = widget
 
