@@ -76,9 +76,6 @@ class Form(Input, ttk.Frame):
         """
         return list(self.tkf_children)
 
-    def on_master_update(self):
-        pass
-
     def set(self, dict_):
         for key, value in dict_.items():
             widget = self.tkf_children.get(key)

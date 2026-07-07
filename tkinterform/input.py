@@ -21,10 +21,6 @@ class Input(Widget, metaclass=ABCMeta):
         """Override method to handle invalid behaviors."""
         pass
 
-    def on_update(self, *args):
-        """Override method to handle input updates."""
-        self.master.event_generate("<<TkfInputUpdate>>", when="tail")
-
     @abstractmethod
     def set(self, value):
         """Override method to set this `tkinterform.Input` value."""

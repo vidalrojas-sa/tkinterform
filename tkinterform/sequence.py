@@ -14,16 +14,16 @@ class Sequence(Input, ttk.Frame):
 
         super(Sequence, self).__init__(master, *args, **kwargs)
 
-    def _refresh_children(self):
+    def _go_update_fieldsets(self):
         for form in self.fieldsets:
-            form.on_master_update()
+            form.event_generate("<<TkfSequenceUpdate>>", when="tail")
 
     def add(self, refresh_children=True):
         form = self.form(self)
         self.append(form)
 
         if refresh_children:
-            self._refresh_children()
+            self._go_update_fieldsets()
 
         return form
 
@@ -47,7 +47,7 @@ class Sequence(Input, ttk.Frame):
                 self.config(width=1, height=1)
 
             if refresh_children:
-                self._refresh_children()
+                self._go_update_fieldsets()
 
     def get(self):
         return [form.get() for form in self.fieldsets]
@@ -61,4 +61,4 @@ class Sequence(Input, ttk.Frame):
         for element in list_:
             self.add(refresh_children=False).set(element)
 
-        self._refresh_children()
+        self._go_update_fieldsets()

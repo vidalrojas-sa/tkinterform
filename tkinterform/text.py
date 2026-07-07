@@ -45,7 +45,7 @@ class Text(Input, ttk.Entry):
 
     def on_text_write(self, *args):
         if self.observe and not self._stop_observe:
-            self.on_update(*args)
+            self.master.event_generate("<<TkfInputUpdate>>", when="tail")
 
     def set(self, string):
         with self._stop_observer():
