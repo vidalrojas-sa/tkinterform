@@ -29,7 +29,7 @@ class _FormElement(Form):
         index = self.current_position
         if index is not None:
             self.tkf_children.get("title").config(
-                text=f"{self.description} {index + 1}"
+                text="%s %s" % (self.description, (index + 1))
             )
 
 
