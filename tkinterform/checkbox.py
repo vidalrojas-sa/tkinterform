@@ -12,10 +12,10 @@ class Checkbox(Input, ttk.Checkbutton):
         self.checkbox_var = tk.BooleanVar()
 
         try:
-            self.text_var.trace_add("write", self.on_toggle)
+            self.checkbox_var.trace_add("write", self.on_toggle)
         except AttributeError:
             # Fallback for Python<=3.6
-            self.text_var.trace("w", self.on_toggle)
+            self.checkbox_var.trace("w", self.on_toggle)
 
         super().__init__(master, variable=self.checkbox_var, *args, **kwargs)
 
