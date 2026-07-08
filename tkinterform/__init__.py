@@ -1,4 +1,5 @@
 from tkinterform.checkbutton import Checkbutton
+from tkinterform.combobox import Combobox
 from tkinterform.form import Form
 from tkinterform.input import Input
 from tkinterform.sequence import Sequence
@@ -55,15 +56,20 @@ def _test():
         text="Create element",
     )
     form.add(Sequence, form=_FormElement, name="sequence")
+    form.add(ttk.Label, text="Combobox")
+    form.add(Combobox, name="combobox")
+    form.tkf_children.get("combobox").add_option("Option 1", 1)
+    form.tkf_children.get("combobox").add_option("Option 2", 2)
     form_values = {
         "text": "Hello, world!",
+        "checkbutton": True,
         "sequence": [
             {"text": "I am an element from a sequence!"},
             {"text": "I am another element from a sequence!"},
         ],
     }
-    form.set(form_values)
-    form.add(ttk.Button, command=lambda: print(form.get()), text="Print")
+    form.set_value(form_values)
+    form.add(ttk.Button, command=lambda: print(form.get_value()), text="Print")
     form.add(ttk.Button, command=root.destroy, text="Quit")
     form.pack(fill="x", padx=8, pady=8)
     root.iconify()
