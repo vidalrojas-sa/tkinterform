@@ -17,7 +17,9 @@ class Checkbutton(Input, ttk.Checkbutton):
             # Fallback for Python<=3.6
             self.checkbutton_var.trace("w", self.on_toggle)
 
-        super().__init__(master, variable=self.checkbutton_var, *args, **kwargs)
+        super(Checkbutton, self).__init__(
+            master, variable=self.checkbutton_var, *args, **kwargs
+        )
 
     def get(self):
         return self.checkbutton_var.get()
