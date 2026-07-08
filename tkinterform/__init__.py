@@ -47,7 +47,7 @@ def _test():
     form.add(ttk.Label, anchor="center", text=text)
     form.add(ttk.Label, text="Text")
     form.add(Text, name="text")
-    form.add(Checkbutton, name="checkbox", text="Checkbox")
+    form.add(Checkbutton, name="checkbutton", text="Checkbutton")
     form.add(ttk.Label, text="Sequence")
     form.add(
         ttk.Button,
