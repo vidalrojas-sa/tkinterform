@@ -20,7 +20,11 @@ class Combobox(Input, ttk.Combobox):
             self.text_var.trace("w", self.on_select)
 
         super(Combobox, self).__init__(
-            master, readonly=True, textvariable=self.text_var, *args, **kwargs
+            master,
+            state="readonly",
+            textvariable=self.text_var,
+            *args,
+            **kwargs
         )
 
     @contextmanager
