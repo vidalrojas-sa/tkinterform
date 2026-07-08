@@ -3,24 +3,24 @@ from tkinter import ttk
 from .input import Input
 
 
-class Checkbox(Input, ttk.Checkbutton):
+class Checkbutton(Input, ttk.Checkbutton):
     def __init__(self, master, *args, **kwargs):
         """
         Construct a `tkinterform.Checkbox` widget with the parent MASTER.
         """
         self._do_not_trace = False
-        self.checkbox_var = tk.BooleanVar()
+        self.checkbutton_var = tk.BooleanVar()
 
         try:
-            self.checkbox_var.trace_add("write", self.on_toggle)
+            self.checkbutton_var.trace_add("write", self.on_toggle)
         except AttributeError:
             # Fallback for Python<=3.6
-            self.checkbox_var.trace("w", self.on_toggle)
+            self.checkbutton_var.trace("w", self.on_toggle)
 
-        super().__init__(master, variable=self.checkbox_var, *args, **kwargs)
+        super().__init__(master, variable=self.checkbutton_var, *args, **kwargs)
 
     def get(self):
-        return self.checkbox_var.get()
+        return self.checkbutton_var.get()
 
     def is_valid(self):
         return True
