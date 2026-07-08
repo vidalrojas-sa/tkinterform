@@ -1,4 +1,4 @@
-from tkinterform.checkbox import Checkbutton
+from tkinterform.checkbutton import Checkbutton
 from tkinterform.form import Form
 from tkinterform.input import Input
 from tkinterform.sequence import Sequence
