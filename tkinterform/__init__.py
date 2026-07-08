@@ -5,6 +5,7 @@ from tkinterform.hidden import Hidden
 from tkinterform.input import Input
 from tkinterform.sequence import Sequence
 from tkinterform.text import Text
+from tkinterform.textarea import Textarea
 
 __version__ = "0.1.0"
 
@@ -61,6 +62,8 @@ def _test():
     form.add(Combobox, name="combobox")
     form.tkf_children.get("combobox").add_option("Option 1", 1)
     form.tkf_children.get("combobox").add_option("Option 2", 2)
+    form.add(ttk.Label, text="Textarea")
+    form.add(Textarea, name="text_area")
     form.add(Hidden, name="hidden")
     form_values = {
         "text": "Hello, world!",
@@ -69,6 +72,8 @@ def _test():
             {"text": "I am an element from a sequence!"},
             {"text": "I am another element from a sequence!"},
         ],
+        "combobox": 2,
+        "text_area": "I am a lot of text that you can edit, bla bla bla...",
         "hidden": "I am a hidden value...",
     }
     form.set_value(form_values)
