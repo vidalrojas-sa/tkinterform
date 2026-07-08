@@ -1,4 +1,5 @@
 from tkinter import ttk
+from .hidden import Hidden
 from .input import Input
 from .sequence import Sequence
 from .widget import Widget
@@ -31,7 +32,9 @@ class Form(Input, ttk.Frame):
         """Internal function."""
         master = self.tkf_children.get(master) if master else self
         widget = widget_type(master, **kwargs)
-        widget.pack(fill="x")
+
+        if not isinstance(widget, Hidden):
+            widget.pack(fill="x")
 
         if name is not None:
             if isinstance(widget, Widget):

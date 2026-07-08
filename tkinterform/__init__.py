@@ -1,6 +1,7 @@
 from tkinterform.checkbutton import Checkbutton
 from tkinterform.combobox import Combobox
 from tkinterform.form import Form
+from tkinterform.hidden import Hidden
 from tkinterform.input import Input
 from tkinterform.sequence import Sequence
 from tkinterform.text import Text
@@ -60,6 +61,7 @@ def _test():
     form.add(Combobox, name="combobox")
     form.tkf_children.get("combobox").add_option("Option 1", 1)
     form.tkf_children.get("combobox").add_option("Option 2", 2)
+    form.add(Hidden, name="hidden")
     form_values = {
         "text": "Hello, world!",
         "checkbutton": True,
@@ -67,6 +69,7 @@ def _test():
             {"text": "I am an element from a sequence!"},
             {"text": "I am another element from a sequence!"},
         ],
+        "hidden": "I am a hidden value...",
     }
     form.set_value(form_values)
     form.add(ttk.Button, command=lambda: print(form.get_value()), text="Print")
