@@ -40,14 +40,14 @@ class Sequence(Input, ttk.Frame):
         if not self.fieldsets:
             self.collapse()
 
-    def get(self, index=None):
+    def get_value(self, index=None):
         if index is None:
-            return [form.get() for form in self.fieldsets]
+            return [form.get_value() for form in self.fieldsets]
 
-        return self.fieldsets[index].get()
+        return self.fieldsets[index].get_value()
 
     def _get_all(self):
-        return [form.get() for form in self.fieldsets]
+        return [form.get_value() for form in self.fieldsets]
 
     def _go_update_fieldsets(self):
         for form in self.fieldsets:
@@ -56,16 +56,16 @@ class Sequence(Input, ttk.Frame):
     def is_valid(self):
         return all(form.is_valid() for form in self.fieldsets)
 
-    def set(self, value, index=None):
+    def set_value(self, value, index=None):
         if index is None:
             self._set_all(value)
         else:
-            self.fieldsets[index].set(value)
+            self.fieldsets[index].set_value(value)
 
     def _set_all(self, values):
         self.clear()
 
         for value in values:
-            self.add().set(value)
+            self.add().set_value(value)
 
         self._go_update_fieldsets()

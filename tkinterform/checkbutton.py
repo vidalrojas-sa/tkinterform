@@ -22,15 +22,7 @@ class Checkbutton(Input, ttk.Checkbutton):
             master, variable=self.checkbutton_var, *args, **kwargs
         )
 
-    @contextmanager
-    def _trace_stop(self):
-        self._do_not_trace = True
-        try:
-            yield
-        finally:
-            self._do_not_trace = False
-
-    def get(self):
+    def get_value(self):
         return self.checkbutton_var.get()
 
     def is_valid(self):
@@ -40,8 +32,16 @@ class Checkbutton(Input, ttk.Checkbutton):
         if not self._do_not_trace:
             self.master.event_generate("<<TkfInputUpdate>>", when="tail")
 
-    def set(self, value=None):
+    def set_value(self, value=None):
         with self._trace_stop():
             self.checkbutton_var.set(
                 bool(value) if value is not None else False
             )
+
+    @contextmanager
+    def _trace_stop(self):
+        self._do_not_trace = True
+        try:
+            yield
+        finally:
+            self._do_not_trace = False

@@ -23,19 +23,11 @@ class Text(Input, ttk.Entry):
             master, textvariable=self.text_var, *args, **kwargs
         )
 
-    @contextmanager
-    def _trace_stop(self):
-        self._do_not_trace = True
-        try:
-            yield
-        finally:
-            self._do_not_trace = False
-
-    def get(self):
-        return self.text_var.get().strip()
+    def get_value(self):
+        return self.get().strip()
 
     def is_valid(self):
-        if self.required and not self.get():
+        if self.required and not self.get_value():
             return False
 
         return True
@@ -44,8 +36,16 @@ class Text(Input, ttk.Entry):
         if not self._do_not_trace:
             self.master.event_generate("<<TkfInputUpdate>>", when="tail")
 
-    def set(self, string):
+    def set_value(self, string):
         with self._trace_stop():
             self.delete(0, tk.END)
             if string is not None and string != "":
                 self.insert(0, string)
+
+    @contextmanager
+    def _trace_stop(self):
+        self._do_not_trace = True
+        try:
+            yield
+        finally:
+            self._do_not_trace = False

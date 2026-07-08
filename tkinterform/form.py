@@ -57,17 +57,17 @@ class Form(Input, ttk.Frame):
         widget = self.tkf_children.get(name)
         widget.config(**kwargs)
 
-    def get(self, name=None):
+    def get_value(self, name=None):
         if name is None:
             return self._get_all()
 
         widget = self.tkf_children.get(name)
 
-        return widget.get() if isinstance(widget, Input) else None
+        return widget.get_value() if isinstance(widget, Input) else None
 
     def _get_all(self):
         return {
-            name: widget.get()
+            name: widget.get_value()
             for name, widget in self.tkf_children.items()
             if isinstance(widget, Input)
         }
@@ -89,25 +89,25 @@ class Form(Input, ttk.Frame):
         """
         return list(self.tkf_children)
 
-    def set(self, dict_, name=None):
+    def set_value(self, dict_, name=None):
         if name is None:
             self._set_all(dict_)
         elif name in dict_:
             widget = self.tkf_children.get(name)
 
             if isinstance(widget, Input):
-                widget.set(dict_[name])
+                widget.set_value(dict_[name])
 
     def _set_all(self, dict_):
         for name, value in dict_.items():
             widget = self.tkf_children.get(name)
 
             if isinstance(widget, Input):
-                widget.set(value)
+                widget.set_value(value)
 
     def values(self):
         return [
-            widget.get()
+            widget.get_value()
             for widget in self.tkf_children.values()
             if isinstance(widget, Input)
         ]
