@@ -42,5 +42,6 @@ class Checkbutton(Input, ttk.Checkbutton):
 
     def set(self, value=None):
         with self._trace_stop():
-            if isinstance(value, bool):
-                tk.BooleanVar.set(value)
+            self.checkbutton_var.set(
+                bool(value) if value is not None else False
+            )
