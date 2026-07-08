@@ -1,12 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
+from contextlib import contextmanager
 from .input import Input
 
 
 class Checkbutton(Input, ttk.Checkbutton):
     def __init__(self, master, *args, **kwargs):
         """
-        Construct a `tkinterform.Checkbox` widget with the parent MASTER.
+        Construct a `tkinterform.Checkbutton` widget with the parent MASTER.
         """
         self._do_not_trace = False
         self.checkbutton_var = tk.BooleanVar()
@@ -20,6 +21,14 @@ class Checkbutton(Input, ttk.Checkbutton):
         super(Checkbutton, self).__init__(
             master, variable=self.checkbutton_var, *args, **kwargs
         )
+
+    @contextmanager
+    def _trace_stop(self):
+        self._do_not_trace = True
+        try:
+            yield
+        finally:
+            self._do_not_trace = False
 
     def get(self):
         return self.checkbutton_var.get()
