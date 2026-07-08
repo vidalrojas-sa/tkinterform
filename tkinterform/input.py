@@ -12,7 +12,7 @@ class Input(Widget, metaclass=ABCMeta):
         super(Input, self).__init__(*args, **kwargs)
 
     @abstractmethod
-    def get(self):
+    def get_value(self):
         """Override method to get this `tkinterform.Input` value."""
         pass
 
@@ -22,6 +22,6 @@ class Input(Widget, metaclass=ABCMeta):
         pass
 
     @abstractmethod
-    def set(self, value):
+    def set_value(self, value):
         """Override method to set this `tkinterform.Input` value."""
         pass
