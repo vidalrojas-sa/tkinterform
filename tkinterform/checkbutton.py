@@ -40,7 +40,7 @@ class Checkbutton(Input, ttk.Checkbutton):
         if not self._do_not_trace:
             self.master.event_generate("<<TkfInputUpdate>>", when="tail")
 
-    def set(self, value):
+    def set(self, value=None):
         with self._trace_stop():
             if isinstance(value, bool):
                 tk.BooleanVar.set(value)
