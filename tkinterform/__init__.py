@@ -66,8 +66,12 @@ def _test():
     form.add(Textarea, name="text_area")
     form.add(ttk.Label, text="Table")
     form.add(Table, name="table", columns=("column1", "column2"))
-    form.tkf_children.get("table").heading(column="column1", text="Column 1")
-    form.tkf_children.get("table").heading(column="column2", text="Column 2")
+    form.tkf_children.get("table").add_heading(
+        column="column1", text="Column 1"
+    )
+    form.tkf_children.get("table").add_heading(
+        column="column2", text="Column 2"
+    )
     form.add(Hidden, name="hidden")
     form_values = {
         "text": "Hello, world!",
