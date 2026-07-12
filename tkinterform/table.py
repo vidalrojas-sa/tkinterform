@@ -7,10 +7,12 @@ from .input import Input
 class TableInput(tk.Entry):
     def __init__(self, master, column, iid, min_width, text, **kwargs):
         super(TableInput, self).__init__(master, **kwargs)
+
         self.master = master
         self.min_width = min_width
         self.column = column
         self.iid = iid
+
         style_font = ttk.Style().lookup(
             self.master.cget("style") or "Treeview", "font"
         )
@@ -23,40 +25,48 @@ class TableInput(tk.Entry):
         self.configure(font=self.tk_font)
         self.insert(0, text)
         self["exportselection"] = False
-        self.focus_force()
-        self.selection_range(0, "end")
-        self.master.update_idletasks()
-        self._initial_y = self.winfo_rooty()
-        self._observe_on_y_change()  # Check if this widget changed position
 
+    def place_at(self, x, y, h):
+        self.current_x = x
+        self.current_y = y
+        w = max(self.tk_font.measure(self.get()) + 12, self.min_width)
+        self.current_h = h
+        self.place(x=x, y=y, width=w, height=h)
+
+        self._initial_y = self.master.winfo_rooty()
+
+        self.focus_set()
+        self.selection_range(0, "end")
         self._set_up_bind()
 
+        self._observe_on_y_change()
+
     def _observe_on_y_change(self):
-        if not self.winfo_exists():
+        if not self.winfo_exists() or not self.master.winfo_exists():
             return
 
-        if self.master.winfo_rooty() != self._initial_y:
+        current_y = self.master.winfo_rooty()
+        if hasattr(self, "_initial_y") and current_y != self._initial_y:
             self.destroy()
             return
 
         self.after(64, self._observe_on_y_change)
 
     def _on_key_press(self, event):
-        self.place_at(self.current_x, self.current_y, self.current_h)
+        if not self.winfo_exists():
+            return
+        w = max(self.tk_font.measure(self.get()) + 12, self.min_width)
+        self.place(
+            x=self.current_x, y=self.current_y, width=w, height=self.current_h
+        )
 
     def on_return(self, event):
+        if not self.winfo_exists():
+            return
         values = list(self.master.item(self.iid, "values"))
         values[self.column] = self.get()
         self.master.item(self.iid, values=tuple(values))
         self.destroy()
-
-    def place_at(self, x, y, h):
-        self.current_x = x
-        self.current_y = y
-        self.current_h = h
-
-        w = max(self.tk_font.measure(self.get()) + 12, self.min_width)
-        self.place(x=x, y=y, width=w, height=h)
 
     def _set_up_bind(self):
         self.bind("<Escape>", lambda event: self.destroy())
@@ -122,19 +132,21 @@ class Table(Input, ttk.Treeview):
         except ValueError:
             return
 
-        x, y, w, h = self.bbox(iid, column_id)
-        self.input_pop_up = TableInput(
-            self, column, iid, w, self.item(iid, "values")[column]
-        )
+        bbox = self.bbox(iid, column_id)
+        if not bbox:
+            return
+
+        x, y, w, h = bbox
+        row_values = self.item(iid, "values")
+        cell_text = row_values[column] if column < len(row_values) else ""
+
+        self.input_pop_up = TableInput(self, column, iid, w, cell_text)
         self.input_pop_up.place_at(x, y, h)
-        self._initial_y = self.master.winfo_rooty()
 
     def remove_row(self, id):
         self.delete(id)
 
     def set_value(self, list_):
-        self.clear()
-
         if not list_:
             return
 
