@@ -1,3 +1,4 @@
+import tkinter as tk
 from tkinter import ttk
 from .hidden import Hidden
 from .input import Input
@@ -34,13 +35,9 @@ class Form(Input, ttk.Frame):
         widget = widget_type(master, **kwargs)
 
         if not isinstance(widget, Hidden):
-            widget.pack(fill="x")
+            widget.pack(fill=tk.X)
 
-        if name is not None:
-            if isinstance(widget, Widget):
-                widget.tkf_name = name
-
-            self.tkf_children[name] = widget
+        self.point(widget, name)
 
         return widget
 
@@ -91,6 +88,13 @@ class Form(Input, ttk.Frame):
         The keys are strings.
         """
         return list(self.tkf_children)
+
+    def point(self, widget, name=None):
+        if name is not None:
+            if isinstance(widget, Widget):
+                widget.tkf_name = name
+
+            self.tkf_children[name] = widget
 
     def set_value(self, dict_, name=None):
         if name is None:

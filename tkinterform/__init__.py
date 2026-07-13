@@ -3,7 +3,6 @@ from tkinterform.combobox import Combobox
 from tkinterform.form import Form
 from tkinterform.hidden import Hidden
 from tkinterform.sequence import Sequence
-from tkinterform.table import Table
 from tkinterform.text import Text
 from tkinterform.textarea import Textarea
 
@@ -64,14 +63,6 @@ def _test():
     form.tkf_children.get("combobox").add_option("Option 2", 2)
     form.add(ttk.Label, text="Textarea")
     form.add(Textarea, name="text_area")
-    form.add(ttk.Label, text="Table")
-    form.add(Table, name="table", columns=("column1", "column2"))
-    form.tkf_children.get("table").add_heading(
-        column="column1", text="Column 1"
-    )
-    form.tkf_children.get("table").add_heading(
-        column="column2", text="Column 2"
-    )
     form.add(Hidden, name="hidden")
     form_values = {
         "text": "Hello, world!",
@@ -82,13 +73,6 @@ def _test():
         ],
         "combobox": 2,
         "text_area": "I am a lot of text that you can edit, bla bla bla...",
-        "table": [
-            {
-                "column1": "I am a column value.",
-                "column2": "I am the second column value!",
-            },
-            {"column1": "I am a lonely column value..."},
-        ],
         "hidden": "I am a hidden value...",
     }
     form.set_value(form_values)
