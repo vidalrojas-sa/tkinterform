@@ -2,7 +2,7 @@ from tkinterform.checkbutton import Checkbutton
 from tkinterform.combobox import Combobox
 from tkinterform.form import Form
 from tkinterform.hidden import Hidden
-from tkinterform.sequence import Sequence
+from tkinterform.list import List
 from tkinterform.text import Text
 from tkinterform.textarea import Textarea
 
@@ -26,7 +26,7 @@ class _FormElement(Form):
         self._set_up_bind()
 
     def _set_up_bind(self):
-        self.bind("<<TkfSequenceUpdate>>", self.on_sequence_update)
+        self.bind("<<TkfListUpdate>>", self.on_sequence_update)
 
     def _delete_self(self):
         index = self._at_index_in_sequence
@@ -50,13 +50,13 @@ def _test():
     form.add(ttk.Label, text="Text")
     form.add(Text, name="text")
     form.add(Checkbutton, name="checkbutton", text="Checkbutton")
-    form.add(ttk.Label, text="Sequence")
+    form.add(ttk.Label, text="List")
     form.add(
         ttk.Button,
-        command=lambda: form.tkf_children.get("sequence").add(),
+        command=lambda: form.tkf_children.get("list").add(),
         text="Create element",
     )
-    form.add(Sequence, form=_FormElement, name="sequence")
+    form.add(List, form=_FormElement, name="list")
     form.add(ttk.Label, text="Combobox")
     form.add(Combobox, name="combobox")
     form.tkf_children.get("combobox").add_option("Option 1", 1)
@@ -67,9 +67,9 @@ def _test():
     form_values = {
         "text": "Hello, world!",
         "checkbutton": True,
-        "sequence": [
-            {"text": "I am an element from a sequence!"},
-            {"text": "I am another element from a sequence!"},
+        "list": [
+            {"text": "I am an element from a list!"},
+            {"text": "I am another element from a list!"},
         ],
         "combobox": 2,
         "text_area": "I am a lot of text that you can edit, bla bla bla...",

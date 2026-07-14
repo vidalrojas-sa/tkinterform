@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from .hidden import Hidden
 from .input import Input
-from .sequence import Sequence
+from .list import List
 from .widget import Widget
 
 
@@ -43,7 +43,7 @@ class Form(Input, ttk.Frame):
 
     @property
     def _at_index_in_sequence(self):
-        if isinstance(self.master, Sequence):
+        if isinstance(self.master, List):
             try:
                 return self.master.fieldsets.index(self)
             except ValueError:

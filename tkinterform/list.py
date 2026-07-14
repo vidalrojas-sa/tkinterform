@@ -2,7 +2,7 @@ from tkinter import ttk
 from .input import Input
 
 
-class Sequence(Input, ttk.Frame):
+class List(Input, ttk.Frame):
     def __init__(self, master, form, form_padding=None, *args, **kwargs):
         """
         Construct a `tkinterform.Sequence` widget with the parent MASTER.
@@ -11,7 +11,7 @@ class Sequence(Input, ttk.Frame):
         self.form_padding = form_padding
         self.fieldsets = []
 
-        super(Sequence, self).__init__(master, *args, **kwargs)
+        super(List, self).__init__(master, *args, **kwargs)
 
     def add(self, **kwargs):
         form = self.form(self, **kwargs)
@@ -51,7 +51,7 @@ class Sequence(Input, ttk.Frame):
 
     def _go_update_fieldsets(self):
         for form in self.fieldsets:
-            form.event_generate("<<TkfSequenceUpdate>>", when="tail")
+            form.event_generate("<<TkfListUpdate>>", when="tail")
 
     def is_valid(self):
         return all(form.is_valid() for form in self.fieldsets)
